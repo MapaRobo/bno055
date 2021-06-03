@@ -295,9 +295,9 @@ class SensorIMU:
         imu_data.angular_velocity.y = gyroscope[1]
         imu_data.angular_velocity.z = gyroscope[2]
 
-        imu_data.orientation_covariance[0] = -1
-        imu_data.linear_acceleration_covariance[0] = -1
-        imu_data.angular_velocity_covariance[0] = -1
+        imu_data.orientation_covariance[0] = 0
+        imu_data.linear_acceleration_covariance[0] = 0
+        imu_data.angular_velocity_covariance[0] = 0
 
         self.imu_data_seq_counter=+1
 
