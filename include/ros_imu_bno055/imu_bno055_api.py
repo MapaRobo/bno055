@@ -436,7 +436,7 @@ class BoschIMU:
         #    - P6
         #    - P7
 
-        self.set_imu_axis(axis_placement = P3 )
+        self.set_imu_axis(axis_placement = P1 )
 
 
         # Available operation modes:
