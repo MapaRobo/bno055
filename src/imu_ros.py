@@ -149,7 +149,7 @@ class SensorIMU:
 
 
         # Set imu axis
-        status_3 = self.bno055.set_imu_axis(axis_placement = P1)
+        status_3 = self.bno055.set_imu_axis(axis_placement = P3)
 
         if status_3 == RESPONSE_OK:
             rospy.loginfo("Axis configured successfully")
