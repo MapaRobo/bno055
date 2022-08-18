@@ -68,7 +68,7 @@ class SensorIMU:
         # Internal variables
         self.imu_data_seq_counter = 0
         self.imu_magnetometer_seq_counter = 0
-        self.imu_temperature_seq_counter = 0
+        #self.imu_temperature_seq_counter = 0
         self.stop_request = False
 
         # Create topics
@@ -77,8 +77,8 @@ class SensorIMU:
         if self.use_magnetometer == True:
             self.pub_imu_magnetometer = rospy.Publisher('imu/magnetometer', MagneticField, queue_size=1)
         
-        if self.use_temperature == True:
-            self.pub_imu_temperature = rospy.Publisher('imu/temperature', Temperature, queue_size=1)
+        #if self.use_temperature == True:
+        #    self.pub_imu_temperature = rospy.Publisher('imu/temperature', Temperature, queue_size=1)
 
 
         # Create service
@@ -99,7 +99,7 @@ class SensorIMU:
         self.reset_orientation = rospy.get_param(self.node_name + '/reset_orientation', True)
         self.frequency = rospy.get_param(self.node_name + '/frequency', 20)
         self.use_magnetometer = rospy.get_param(self.node_name + '/use_magnetometer', False)
-        self.use_temperature = rospy.get_param(self.node_name + '/use_temperature', False)
+        #self.use_temperature = rospy.get_param(self.node_name + '/use_temperature', False)
 
         switcher = {
 
@@ -282,33 +282,32 @@ class SensorIMU:
         imu_data.header.frame_id = self.frame_id
         imu_data.header.seq = self.imu_data_seq_counter
 
-        imu_data.orientation.w = quaternion[0]
-        imu_data.orientation.x = quaternion[1]
-        imu_data.orientation.y = quaternion[2]
-        imu_data.orientation.z = quaternion[3]
+        imu_data.orientation.w = quaternion[0] / 16384.0
+        imu_data.orientation.x = quaternion[1] / 16384.0
+        imu_data.orientation.y = quaternion[2] / 16384.0
+        imu_data.orientation.z = quaternion[3] / 16384.0
 
-        imu_data.linear_acceleration.x = linear_acceleration[0]
-        imu_data.linear_acceleration.y = linear_acceleration[1]
-        imu_data.linear_acceleration.z = linear_acceleration[2]
+        imu_data.linear_acceleration.x = 0 #linear_acceleration[0]
+        imu_data.linear_acceleration.y = 0 #linear_acceleration[1]
+        imu_data.linear_acceleration.z = 0 #linear_acceleration[2]
 
-        imu_data.angular_velocity.x = gyroscope[0]
-        imu_data.angular_velocity.y = gyroscope[1]
-        imu_data.angular_velocity.z = gyroscope[2]
+        imu_data.angular_velocity.x = 0 #gyroscope[0]
+        imu_data.angular_velocity.y = 0 #gyroscope[1]
+        imu_data.angular_velocity.z = 0 #gyroscope[2]
 
-        imu_data.orientation_covariance[0] = 0.03
-        imu_data.orientation_covariance[4] = 0.03
-        imu_data.orientation_covariance[8] = 0.03
-        imu_data.linear_acceleration_covariance[0] = 1.0
-        imu_data.linear_acceleration_covariance[4] = 1.0
-        imu_data.linear_acceleration_covariance[8] = 1.0
-        imu_data.angular_velocity_covariance[0] = 0.1
-        imu_data.angular_velocity_covariance[4] = 0.1
-        imu_data.angular_velocity_covariance[8] = 0.1
+        imu_data.orientation_covariance[0] = 1e-30    # 0.1
+        imu_data.orientation_covariance[4] = 1e-30    # 0.1
+        imu_data.orientation_covariance[8] = 1e-30    # 0.1
+        imu_data.linear_acceleration_covariance[0] = 100000 # 1.0
+        imu_data.linear_acceleration_covariance[4] = 100000 # 1.0
+        imu_data.linear_acceleration_covariance[8] = 100000 # 1.0
+        imu_data.angular_velocity_covariance[0] = 100000 # 0.1
+        imu_data.angular_velocity_covariance[4] = 100000 # 0.1
+        imu_data.angular_velocity_covariance[8] = 100000 # 0.1
 
         self.imu_data_seq_counter=+1
 
         self.pub_imu_data.publish(imu_data)
-
 
     def publish_imu_magnetometer(self):
 
@@ -372,8 +371,8 @@ class SensorIMU:
                     self.publish_imu_magnetometer()
 
                 # Publish temperature data                
-                if self.use_temperature == True:
-                    self.publish_imu_temperature()
+                #if self.use_temperature == True:
+                #    self.publish_imu_temperature()
 
             rate.sleep()
 

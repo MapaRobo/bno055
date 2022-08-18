@@ -5,7 +5,7 @@
     <arg name="frame_id" default="imu_link" />
     <arg name="operation_mode" default="IMU"/>
     <arg name="oscillator" default="INTERNAL" />
-    <arg name="reset_orientation" default="false" />
+    <arg name="reset_orientation" default="true" />
     <arg name="frequency" default="50" /> 
     <arg name="use_magnetometer" default="false" />
     <arg name="use_temperature" default="false" /> 
